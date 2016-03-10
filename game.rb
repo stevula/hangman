@@ -13,22 +13,22 @@ class Game
   def run
     @word = get_word
     @letters = @word.split(//)
+    @guessed_letters = []
     @guesses_remaining = @word.length
 
     build_letters
 
-    until won?
+    until won? || lost?
       render_tiles
       prompt_for_guess
-
-      if @guesses_remaining == 0
-        puts "You died."
-        break
-      end
     end
 
     # show final board
     render_tiles
+    puts
+
+    puts "You died. The word was #{@word}." if lost?
+    puts "You won!" if won?
 
     # retry or abort
     retry_or_abort
@@ -47,7 +47,9 @@ class Game
   end
 
   def render_tiles
+    puts "Letters guessed: #{@guessed_letters.join(", ") || 'none'}"
     puts "Guessing remaining: #{@guesses_remaining}"
+
     @letters.each do |letter|
       letter_object = @letter_pairs[letter]
       print letter_object.guessed? ? "_#{letter}_ " : "___ "
@@ -58,6 +60,13 @@ class Game
   def prompt_for_guess
     puts "Which letter would you like to guess?"
     letter = gets.chomp
+
+    while @guessed_letters.include? letter
+      puts "Guess a letter you haven't guessed yet!"
+      letter = gets.chomp
+    end
+
+    @guessed_letters << letter
     guess(letter)
   end
 
@@ -77,6 +86,10 @@ class Game
 
   def won?
     @letter_pairs.all? {|letter, letter_obj| letter_obj.guessed?}
+  end
+
+  def lost?
+    @guesses_remaining == 0
   end
 
   def retry_or_abort
