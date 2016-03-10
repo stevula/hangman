@@ -1,19 +1,20 @@
 class Game
   def initialize
-    @word = get_word
-    @letters = @word.split(//)
-    @guesses_remaining = @word.length
+    @dictionary = Dictionary.new
     run
   end
 
   private
 
   def get_word
-    dictionary = Dictionary.new
-    dictionary.word
+    @dictionary.word
   end
 
   def run
+    @word = get_word
+    @letters = @word.split(//)
+    @guesses_remaining = @word.length
+
     build_letters
 
     until won?
@@ -26,7 +27,11 @@ class Game
       end
     end
 
-    puts "Play again? (Y/N)"
+    # show final board
+    render_tiles
+
+    # retry or abort
+    retry_or_abort
   end
 
   def build_letters
@@ -42,6 +47,7 @@ class Game
   end
 
   def render_tiles
+    puts "Guessing remaining: #{@guesses_remaining}"
     @letters.each do |letter|
       letter_object = @letter_pairs[letter]
       print letter_object.guessed? ? "_#{letter}_ " : "___ "
@@ -56,7 +62,7 @@ class Game
   end
 
   def guess(letter_value)
-    letter = @letter_pairs[letter_value]
+    letter = @letter_pairs[letter_value.downcase]
 
     if letter
       puts "Correct!"
@@ -71,5 +77,12 @@ class Game
 
   def won?
     @letter_pairs.all? {|letter, letter_obj| letter_obj.guessed?}
+  end
+
+  def retry_or_abort
+    puts "Play again? (Y/N)"
+    response = gets.chomp
+
+    response.upcase == "Y" ? run : abort("Thanks for playing!")
   end
 end
