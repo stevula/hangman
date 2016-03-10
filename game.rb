@@ -34,10 +34,10 @@ class Game
     retry_or_abort
   end
 
+  # creates a hash of letters with associated letter objects
   def build_letters
     unique_letters = @letters.uniq
     
-    # this becomes a collection of letters and letter objects {"A" => LetterObject}
     @letter_pairs = {}
 
     unique_letters.each do |letter_value|

@@ -1,3 +1,0 @@
-describe Hangman do
-  
-end
