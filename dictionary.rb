@@ -4,7 +4,7 @@ class Dictionary
   end
 
   def word
-    @words.sample
+    @words.sample.upcase
   end
 
   private
@@ -12,7 +12,7 @@ class Dictionary
   def parse_dictionary(min_length: 0, max_length: 12)
     words = []
 
-    dictionary = File.open('dictionary.txt')
+    dictionary = File.open('data/dictionary.txt')
     dictionary.each_line do |word| 
       word = word.chomp
       words << word if word.length.between?(min_length, max_length)

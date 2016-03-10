@@ -34,7 +34,7 @@ class Game
     retry_or_abort
   end
 
-  # creates a hash of letters with associated letter objects
+  # create a hash of letters with associated letter objects
   def build_letters
     unique_letters = @letters.uniq
     
@@ -95,12 +95,12 @@ class Game
   end
 
   def guess(letter_value)
-    letter = @letter_pairs[letter_value]
+    letter_in_word = @letter_pairs[letter_value]
 
-    if letter
+    if letter_in_word
       puts "Correct!"
       puts
-      letter.mark_guessed
+      letter_in_word.mark_guessed
     else
       puts "Incorrect guess!"
       puts
