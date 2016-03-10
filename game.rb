@@ -59,19 +59,43 @@ class Game
 
   def prompt_for_guess
     puts "Which letter would you like to guess?"
-    letter = gets.chomp
+    letter = gets.chomp.upcase
 
-    while @guessed_letters.include? letter
-      puts "Guess a letter you haven't guessed yet!"
-      letter = gets.chomp
+    until validate_letter(letter)
+      puts "Which letter would you like to guess?"
+      letter = gets.chomp.upcase
     end
 
-    @guessed_letters << letter
     guess(letter)
+    @guessed_letters << letter
+  end
+
+  def validate_letter(letter)
+    if letter.to_s.nil?
+      puts "Letter cannot be blank!"
+      return false
+    end
+
+    if @guessed_letters.include? letter
+      puts "Guess a letter you haven't guessed yet!"
+      return false 
+    end
+
+    if letter.length > 1
+      puts "Must enter a single letter!"
+      return false
+    end
+
+    if !letter.match(/[A-Z]/)
+      puts "Must enter a letter character!"
+      return false
+    end
+
+    true
   end
 
   def guess(letter_value)
-    letter = @letter_pairs[letter_value.downcase]
+    letter = @letter_pairs[letter_value]
 
     if letter
       puts "Correct!"

@@ -2,7 +2,7 @@ class Letter
   attr_reader :value
 
   def initialize(value)
-    @value = value.downcase
+    @value = value.upcase
     @guessed = false
   end
 
