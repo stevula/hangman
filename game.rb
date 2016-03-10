@@ -1,11 +1,8 @@
-require_relative 'dictionary'
-require_relative 'letter'
-
 class Game
   def initialize
-    @guesses_remaining = 7
     @word = get_word
     @letters = @word.split(//)
+    @guesses_remaining = @word.length
     run
   end
 
@@ -19,7 +16,7 @@ class Game
   def run
     build_letters
 
-    until game.won?
+    until won?
       render_tiles
       prompt_for_guess
 
@@ -47,8 +44,9 @@ class Game
   def render_tiles
     @letters.each do |letter|
       letter_object = @letter_pairs[letter]
-      puts letter_object.guessed? ? "_#{letter}_" : "___"
+      print letter_object.guessed? ? "_#{letter}_ " : "___ "
     end
+    puts
   end
 
   def prompt_for_guess
@@ -62,14 +60,16 @@ class Game
 
     if letter
       puts "Correct!"
+      puts
       letter.mark_guessed
     else
       puts "Incorrect guess!"
+      puts
       @guesses_remaining -= 1
     end
   end
 
   def won?
-    @letter_pairs.all? {|letter, letter_obj| letter.obj.guessed?}
+    @letter_pairs.all? {|letter, letter_obj| letter_obj.guessed?}
   end
 end
